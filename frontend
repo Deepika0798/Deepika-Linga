@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>TRANSFER DETAILS</title>
+</head>
+<body>
+<form action="BankServlet" method="get">
+<div id="b1">
+<label>Select Bank1 : </label>
+<select name="banks1">
+<option value="SBI">SBI</option>
+<option value="Axis">AXIS</option>
+<option value="HDFC">HDFC</option>
+</select>
+<label> Enter Bank1 Account no : </label>
+<input type="text" name="bacno1"  required autofocus/>
+<label> Enter IFSC Code : </label>
+<input type="text" name="ifsc1"  required/>
+<label>Enter amount to transfer : </label>
+<input type="text" name="amt1"  required/>
+</div>
+<div id="b2">
+<label>Select Bank2 : </label>
+<select name="banks2">
+<option value="SBI">SBI</option>
+<option value="Axis">AXIS</option>
+<option value="HDFC">HDFC</option>
+</select>
+<label> Enter Bank2 Account no : </label>
+<input type="text" name="bacno2"  required autofocus/>
+<label> Enter IFSC Code : </label>
+<input type="text" name="ifsc2"  required/>
+<label>Enter amount to transfer : </label>
+<input type="text" name="amt2"  required/>
+</div>
+<pre>
+<input type="submit" value="Transfer"/>
+</pre>
+</form>
+</body>
+</html>
