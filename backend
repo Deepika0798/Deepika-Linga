@@ -1,0 +1,143 @@
+package com.bank;
+import java.sql.*;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class BankServlet
+ */
+@WebServlet("/BankServlet")
+public class BankServlet extends HttpServlet {
+private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public BankServlet() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+/**
+* @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+*/
+protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+// TODO Auto-generated method stub
+response.setContentType("text/html");
+String url = "jdbc:oracle:thin:@localhost:1521:xe";
+String user = "System";
+String password = "hanisha";
+Connection con;
+PreparedStatement pst = null ,ps,p = null,pstmt,pstment;
+ResultSet rset,rs;
+
+String bank1 = request.getParameter("banks1");
+String bank2 = request.getParameter("banks2");
+
+String acc1 = request.getParameter("bacno1");
+String acc2 = request.getParameter("bacno2");
+
+String ifcode1 = request.getParameter("ifsc1");
+String ifcode2 = request.getParameter("ifsc2");
+
+String am1 = request.getParameter("amt1");
+int amount1 = Integer.parseInt(am1);
+String am2 = request.getParameter("amt2");
+int amount2 = Integer.parseInt(am2);
+
+
+try
+{
+Class.forName("oracle.jdbc.OracleDriver");
+con = DriverManager.getConnection(url, user, password);
+System.out.println("Connected Successfully...");
+String q = "select * from Banks where bname=? and accno=? and ifsc=?";
+ps = con.prepareStatement(q);
+ps.setString(1,bank1);
+ps.setString(2,acc1);
+ps.setString(3,ifcode1);
+rset = ps.executeQuery();
+if(rset.next())
+{
+int id1 = rset.getInt(1);
+String query = "update Banks set amount= amount-? where bid=?";
+pst = con.prepareStatement(query);
+pst.setInt(1,amount1);
+pst.setInt(2,id1);
+int res = pst.executeUpdate();
+if(res>0)
+{
+System.out.println("Updated Sucessfully...");
+}
+else
+{
+System.out.println("Updation Failed...");
+}
+}
+String que = "select * from Banks where bname=? and accno=? and ifsc=?";
+pstmt = con.prepareStatement(que);
+pstmt.setString(1,bank2);
+pstmt.setString(2,acc2);
+pstmt.setString(3,ifcode2);
+rs = pstmt.executeQuery();
+if(rs.next())
+{
+int id2 = rs.getInt(1);
+String quer = "update Banks set amount= amount+? where bid=?";
+p = con.prepareStatement(quer);
+p.setInt(1,amount2);
+p.setInt(2,id2);
+int result = p.executeUpdate();
+if(result>0)
+{
+System.out.println("Updated Successfully...");
+}
+else
+{
+System.out.println("Updation Failed...");
+}
+}
+String ins = "insert into TransferAmount values(?,?,?,?,?)";
+pstment = con.prepareStatement(ins);
+pstment.setString(1,bank1);
+pstment.setString(2,bank2);
+pstment.setString(3,acc1);
+pstment.setString(4,acc2);
+pstment.setInt(5,amount1);
+int r = pstment.executeUpdate();
+if(r>0)
+{
+System.out.println("Inserted Sucessfully...");
+}
+else
+{
+System.out.println("Insertion Failed...");
+}
+pstment.close();
+pst.close();
+p.close();
+pstmt.close();
+rset.close();
+rs.close();
+con.close();
+}
+catch(Exception e)
+{
+System.out.println("Exception had raised");
+e.printStackTrace();
+}
+}
+
+/**
+* @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+*/
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+// TODO Auto-generated method stub
+}
+
+}
